@@ -2,3 +2,6 @@
 journey-old.mp4
 reference.mp4
 resume.pdf
+lanyard-app/node_modules/
+journey-bento-app/node_modules/
+.pydeps/

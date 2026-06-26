@@ -7,11 +7,28 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body { background: #08080C; color: #F0EDE6; font-family: 'Inter', sans-serif; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+
+    /* ── Global background video (Pages 1–5) ── */
+    #globalVideoBg {
+      position: fixed; inset: 0; z-index: 0;
+      overflow: hidden; pointer-events: none;
+    }
+    #globalBgVideo {
+      position: absolute; top: 50%; left: 50%;
+      min-width: 100%; min-height: 100%; width: auto; height: auto;
+      transform: translate(-50%, -50%);
+      object-fit: cover; display: block;
+    }
+    #globalVideoOverlay {
+      position: absolute; inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+    }
+    #siteShell { position: relative; z-index: 1; }
 
     /* ── Scrollbar ── */
     ::-webkit-scrollbar { width: 6px; }
@@ -47,85 +64,35 @@
     }
     .nav-links a:hover::after { width: 100%; }
 
-    /* ── Journey / Hero ── */
-    #journeyPin { position: sticky; top: 0; height: 100vh; overflow: hidden; background: #08080C; }
-    #videoWrap { position: absolute; inset: 0; overflow: hidden; background: #08080C; z-index: 1; }
-    #journeyVideo {
-      position: absolute; top: 50%; left: 50%;
-      min-width: 100%; min-height: 100%; width: auto; height: auto;
-      transform: translate(-50%, -50%); object-fit: cover; pointer-events: none;
-      display: block; z-index: 1;
+    /* ── Hero (Page 1) — reference layout ── */
+    #heroSection {
+      position: relative; height: 100vh; min-height: 560px;
+      overflow: hidden;
     }
-    #heroOverlay {
-      position: absolute; inset: 0; z-index: 20;
-      pointer-events: none;
+    .hero-copy-left {
+      position: absolute; left: 2.5rem; bottom: 10%;
+      max-width: min(720px, 58vw); z-index: 20;
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(1.65rem, 4.2vw, 3rem);
+      font-weight: 600; line-height: 1.12;
+      letter-spacing: -0.02em; color: #F0EDE6;
     }
-    .hero-jingyi {
-      position: absolute; left: 6%; top: 42%;
+    .hero-copy-left p { margin-bottom: 0.15rem; }
+    .hero-tagline-right {
+      position: absolute; right: 5%; top: 36%;
       transform: translateY(-50%);
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2.2rem, 5.5vw, 4.2rem); font-weight: 500;
-      letter-spacing: 0.22em; color: #F0EDE6;
-    }
-    .hero-xia {
-      position: absolute; right: 6%; top: 42%;
-      transform: translateY(-50%);
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2.2rem, 5.5vw, 4.2rem); font-weight: 500;
-      letter-spacing: 0.22em; color: #F0EDE6;
-    }
-    .hero-tagline-bottom {
-      position: absolute; bottom: 14%; left: 50%;
-      transform: translateX(-50%);
-      width: 90%; max-width: 560px;
-      text-align: center; font-size: clamp(14px, 1.6vw, 17px);
-      letter-spacing: 0.08em; font-weight: 300;
+      max-width: min(280px, 30vw); z-index: 20;
+      text-align: right;
+      font-size: clamp(13px, 1.35vw, 16px);
+      letter-spacing: 0.02em; font-weight: 400;
+      color: rgba(240,237,230,0.88); line-height: 1.65;
     }
 
-    /* TrueFocus subtitle */
-    #trueFocusSubtitle {
-      position: absolute; left: 50%; bottom: 24%;
-      transform: translateX(-50%);
-      width: 92%; max-width: 780px;
-      pointer-events: auto;
-    }
-    .true-focus-rows { display: flex; flex-direction: column; gap: 0.55rem; align-items: center; }
-    .focus-container {
+    /* ── Journey (Page 2) — same timeline style as Experience ── */
+    #journey {
       position: relative;
-      display: flex; gap: 0.45em; justify-content: center; align-items: center;
-      flex-wrap: wrap; outline: none; user-select: none;
+      padding: 5rem 2rem;
     }
-    .focus-word {
-      position: relative;
-      font-family: 'Inter', sans-serif;
-      font-size: clamp(0.9rem, 2vw, 1.25rem);
-      font-weight: 300; letter-spacing: 0.14em;
-      text-transform: uppercase; color: #C9A84C;
-      cursor: default; outline: none; user-select: none;
-      transition: filter 0.5s ease, color 0.5s ease;
-      filter: blur(4px);
-    }
-    .focus-word.is-active { filter: blur(0); color: #E8D5A3; }
-    .focus-word.sep { color: rgba(201,168,76,0.45); filter: blur(0); pointer-events: none; }
-    .focus-frame {
-      position: absolute; top: 0; left: 0;
-      pointer-events: none; box-sizing: content-box;
-      opacity: 0;
-      transition: transform 0.5s ease, width 0.5s ease, height 0.5s ease, opacity 0.3s ease;
-      --border-color: #C9A84C;
-      --glow-color: rgba(201, 168, 76, 0.55);
-    }
-    .focus-frame.visible { opacity: 1; }
-    .corner {
-      position: absolute; width: 0.65rem; height: 0.65rem;
-      border: 2px solid var(--border-color);
-      filter: drop-shadow(0 0 4px var(--glow-color));
-      border-radius: 2px;
-    }
-    .corner.top-left    { top: -8px; left: -8px; border-right: none; border-bottom: none; }
-    .corner.top-right   { top: -8px; right: -8px; border-left: none; border-bottom: none; }
-    .corner.bottom-left { bottom: -8px; left: -8px; border-right: none; border-top: none; }
-    .corner.bottom-right{ bottom: -8px; right: -8px; border-left: none; border-top: none; }
 
     /* ShinyText (vanilla CSS) */
     .shiny-text {
@@ -135,76 +102,34 @@
       background-size: 200% auto;
       -webkit-background-clip: text; background-clip: text;
       -webkit-text-fill-color: transparent;
-      animation: shiny-sweep 2.5s linear infinite;
     }
     .shiny-text.shiny-white {
       color: rgba(255,255,255,0.85);
       background-image: linear-gradient(120deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.7) 35%, #ffffff 50%, rgba(255,255,255,0.95) 65%, rgba(255,255,255,0.7) 100%);
+      background-position: center;
     }
     .shiny-text.shiny-heading {
       display: block;
       background-image: linear-gradient(120deg, #d8d4cc 0%, #d8d4cc 35%, #C9A84C 50%, #fff4d6 55%, #d8d4cc 65%, #d8d4cc 100%);
-      animation: shiny-sweep 2s linear infinite;
-    }
-    @keyframes shiny-sweep {
-      0% { background-position: 150% center; }
-      100% { background-position: -50% center; }
+      background-position: center;
     }
 
     #scrollHint {
       position: absolute; bottom: 2.5rem; left: 2.5rem; z-index: 25;
       display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
-      animation: float-scroll 2s ease-in-out infinite;
-    }
-    @keyframes float-scroll {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(8px); }
     }
     .scroll-hint-text { font-size: 0.65rem; letter-spacing: 0.35em; color: rgba(240,237,230,0.4); font-weight: 300; text-transform: uppercase; display: flex; align-items: center; gap: 0.4rem; }
-
-    /* ── Career Journey title (globe phase) ── */
-    #careerTitle {
-      position: absolute; inset: 0; z-index: 22;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      pointer-events: none; opacity: 0;
-      will-change: opacity, transform;
-    }
-    #careerTitle h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(28px, 6vw, 64px); font-weight: 500;
-      letter-spacing: 0.15em; color: #fff; text-align: center;
-      text-shadow: 0 4px 40px rgba(0,0,0,0.95), 0 2px 24px rgba(0,0,0,0.8);
-    }
-    #careerTitle p {
-      font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 300;
-      color: rgba(160,160,160,0.9); margin-top: 0.75rem; letter-spacing: 0.06em; text-align: center;
-    }
-
-    /* ── City pin cards (cover wrong video labels) ── */
-    #cityCards { position: absolute; inset: 0; z-index: 30; pointer-events: none; }
-    .city-card {
-      position: absolute;
-      transform: translate(-50%, -50%);
-      background: rgba(10,10,10,0.85);
-      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-      border: 1px solid rgba(212,175,55,0.3);
-      border-radius: 8px;
-      padding: 0.65rem 0.85rem;
-      max-width: 168px; min-width: 120px;
-      opacity: 0;
-      transition: opacity 0.18s linear;
-    }
-    .city-card h4 {
-      font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 500;
-      color: #fff; margin-bottom: 0.25rem; line-height: 1.2;
-    }
-    .city-card .city-role {
-      font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 300;
-      color: rgba(160,160,160,0.95); line-height: 1.45; margin-bottom: 0.35rem;
-    }
-    .city-card .city-date {
-      font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 400;
-      color: #d4af37; letter-spacing: 0.04em;
+    .contact-center { max-width: 720px; margin: 0 auto; text-align: center; }
+    .contact-center .contact-heading { margin-bottom: 2rem; }
+    .contact-center .contact-grid { margin-bottom: 0; }
+    .contact-avatar {
+      width: 96px; height: 96px;
+      border-radius: 50%;
+      object-fit: cover; object-position: top center;
+      border: 1px solid rgba(201, 168, 76, 0.35);
+      margin: 0 auto 1.5rem;
+      display: block;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35);
     }
 
     /* ── Section titles ── */
@@ -214,8 +139,13 @@
     }
     .section-title-line { width: 40px; height: 1px; background: #C9A84C; margin: 0 auto 3rem; }
     .dark-section { background: transparent; color: #F0EDE6; padding: 5rem 2rem; border-top: 1px solid rgba(255,255,255,0.04); }
-    .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal {
+      opacity: 0; transform: translateY(28px); filter: blur(6px);
+      transition: opacity 0.8s cubic-bezier(0, 0, 0.2, 1),
+                  transform 0.8s cubic-bezier(0, 0, 0.2, 1),
+                  filter 0.8s cubic-bezier(0, 0, 0.2, 1);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); filter: blur(0); }
 
     /* ── Skills ── */
     .skill-col {
@@ -278,18 +208,15 @@
     .exp-card p { font-size: 0.82rem; line-height: 1.7; color: rgba(240,237,230,0.55); margin-bottom: 1rem; font-weight: 300; }
     .exp-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; }
 
-    /* ── Contact ── */
-    #contact { background: transparent; padding: 5rem 2rem 6rem; text-align: center; }
-
-    /* ── Beams background (Skills → Contact) ── */
-    .galaxy-wrap { position: relative; background: #08080C; overflow: hidden; isolation: isolate; }
-    .galaxy-container {
-      position: absolute; inset: 0; z-index: 0;
-      width: 100%; height: 100%; min-height: 100%;
-      pointer-events: none;
+    /* ── Contact (no global video) ── */
+    #contact {
+      background: #08080C; padding: 5rem 2rem 6rem; text-align: center;
+      position: relative; z-index: 3;
+      min-height: 100vh;
+      scroll-margin-top: 5rem;
     }
-    .galaxy-container canvas { display: block; width: 100% !important; height: 100% !important; }
-    .galaxy-content { position: relative; z-index: 1; }
+
+    .content-wrap { position: relative; z-index: 1; }
     .contact-heading { font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 500; color: #F0EDE6; margin-bottom: 3rem; letter-spacing: 0.06em; }
     .contact-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; max-width: 960px; margin: 0 auto; }
     .contact-card {
@@ -316,20 +243,12 @@
     #loader.hidden { opacity: 0; pointer-events: none; }
     .loader-bar { width: 120px; height: 1px; background: rgba(255,255,255,0.1); overflow: hidden; }
     .loader-bar span { display: block; height: 100%; width: 0%; background: #C9A84C; transition: width 0.2s; }
-    #progressBar { position: absolute; bottom: 0; left: 0; height: 1px; background: #C9A84C; width: 0%; opacity: 0.4; z-index: 40; }
-
     @media (max-width: 768px) {
       #siteNav { padding: 1rem 1.25rem; }
       .nav-links { gap: 1rem; }
       .nav-links a { font-size: 11px; }
-      .hero-jingyi, .hero-xia { font-size: 1.5rem; top: 40%; }
-      .hero-jingyi { left: 4%; } .hero-xia { right: 4%; }
-      #trueFocusSubtitle { bottom: 22%; }
-      .focus-word { font-size: 0.78rem; letter-spacing: 0.1em; }
-      .hero-tagline-bottom { bottom: 11%; }
-      .city-card { max-width: 130px; padding: 0.5rem 0.65rem; }
-      .city-card h4 { font-size: 15px; }
-      .city-card .city-role { font-size: 10px; }
+      .hero-copy-left { left: 1.25rem; bottom: 8%; max-width: 92%; font-size: clamp(1.35rem, 6vw, 1.75rem); }
+      .hero-tagline-right { right: 1.25rem; top: 28%; max-width: 48%; font-size: 12px; }
       .contact-grid { grid-template-columns: repeat(2, 1fr); }
       .proj-card h3 { font-size: 28px; }
       .section-title, .contact-heading { font-size: 28px; }
@@ -346,6 +265,16 @@
     <div class="loader-bar"><span id="loaderProgress"></span></div>
   </div>
 
+  <div id="globalVideoBg" aria-hidden="true">
+    <video id="globalBgVideo" autoplay muted loop playsinline webkit-playsinline preload="auto">
+      <source src="public/background45-h264.m4v" type="video/mp4">
+      <source src="public/background45.mov" type="video/quicktime">
+    </video>
+    <div id="globalVideoOverlay"></div>
+  </div>
+
+  <div id="siteShell">
+
   <!-- ══ NAV ══ -->
   <nav id="siteNav">
     <a href="#about" class="nav-logo">JX</a>
@@ -358,82 +287,68 @@
     </ul>
   </nav>
 
-  <!-- ══ JOURNEY / ABOUT ══ -->
+  <!-- ══ HERO (Page 1) ══ -->
   <section id="about">
-    <div id="journeySection" style="height:900vh;position:relative;">
-      <div id="journeyPin">
-        <div id="videoWrap">
-          <video id="journeyVideo" muted playsinline webkit-playsinline preload="auto">
-            <source src="journey-full.mp4?v=2" type="video/mp4">
-            <source src="journey.mov?v=2" type="video/quicktime">
-            <source src="journey.mp4?v=2" type="video/mp4">
-          </video>
-        </div>
-
-        <div id="heroOverlay">
-          <span class="shiny-text hero-jingyi">JINGYI</span>
-          <span class="shiny-text hero-xia">XIA</span>
-          <div id="trueFocusSubtitle">
-            <div class="true-focus-rows">
-              <div class="focus-container" data-sentence="BUSINESS DEVELOPMENT · STRATEGY"></div>
-              <div class="focus-container" data-sentence="OPERATIONS · AI BUILDER"></div>
-            </div>
-            <div class="focus-frame" id="focusFrame">
-              <span class="corner top-left"></span>
-              <span class="corner top-right"></span>
-              <span class="corner bottom-left"></span>
-              <span class="corner bottom-right"></span>
-            </div>
-          </div>
-          <p class="shiny-text shiny-white hero-tagline-bottom">Bridging markets across Europe, the Middle East and Asia</p>
-        </div>
-        <div id="scrollHint">
-          <span class="scroll-hint-text">Scroll <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg></span>
-        </div>
-
-        <!-- CAREER JOURNEY 标题（地球段中央，随后淡出） -->
-        <div id="careerTitle">
-          <h2>CAREER JOURNEY</h2>
-          <p>Across Europe, the Middle East and Asia</p>
-        </div>
-
-        <!-- 城市光点卡片（遮挡视频错误标签） -->
-        <div id="cityCards">
-          <div id="cityLondon" class="city-card" style="left:12%;top:18%;">
-            <h4>London</h4>
-            <p class="city-role">BD & Cross-Border Operations · Family Office</p>
-            <span class="city-date">2024.01 – 2025.08</span>
-          </div>
-          <div id="cityParis" class="city-card" style="left:38%;top:22%;">
-            <h4>Paris</h4>
-            <p class="city-role">Global BD Manager · ApeX Protocol</p>
-            <span class="city-date">2025.12 – Present</span>
-          </div>
-          <div id="cityIstanbul" class="city-card" style="left:35%;top:55%;">
-            <h4>Istanbul</h4>
-            <p class="city-role">Cross-Border Operations · Türkiye</p>
-            <span class="city-date">2024.01 – 2025.08</span>
-          </div>
-          <div id="cityDubai" class="city-card" style="left:42%;top:78%;">
-            <h4>Dubai</h4>
-            <p class="city-role">UAE Company Setup & MENA Expansion</p>
-            <span class="city-date">2024.01 – 2025.08</span>
-          </div>
-          <div id="citySingapore" class="city-card" style="left:82%;top:62%;">
-            <h4>Singapore</h4>
-            <p class="city-role">Southeast Asia Operations & GTM</p>
-            <span class="city-date">2024.01 – 2025.08</span>
-          </div>
-        </div>
-
-        <div id="progressBar"></div>
+    <div id="heroSection">
+      <div class="hero-copy-left reveal visible">
+        <p>By day, I build relationships across borders.</p>
+        <p>By night, I build ideas with AI.</p>
+        <p>Same curiosity. Different outcomes.</p>
+      </div>
+      <p class="hero-tagline-right reveal visible" style="transition-delay:0.12s">Bridging markets across Europe, the Middle East and Asia</p>
+      <div id="scrollHint">
+        <span class="scroll-hint-text">Scroll <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg></span>
       </div>
     </div>
   </section>
 
-  <div class="galaxy-wrap" id="galaxyWrap">
-    <div id="galaxyBg" class="galaxy-container" aria-hidden="true"></div>
-    <div class="galaxy-content">
+  <!-- ══ JOURNEY (Page 2) ══ -->
+  <section id="journey" class="dark-section">
+    <div class="timeline">
+      <div class="timeline-item reveal" style="transition-delay:0.05s">
+        <div class="timeline-date">STRATEGY · London</div>
+        <div class="exp-card">
+          <h3>London</h3>
+          <div class="exp-title">Strategy & Commercial Thinking</div>
+          <p>Built a foundation in business strategy, market research, and commercial analysis. Developed the ability to identify opportunities, evaluate markets, and transform insights into practical business decisions.</p>
+        </div>
+      </div>
+      <div class="timeline-item reveal" style="transition-delay:0.1s">
+        <div class="timeline-date">OPERATIONS · Dubai</div>
+        <div class="exp-card">
+          <h3>Dubai</h3>
+          <div class="exp-title">Building From Zero</div>
+          <p>Supported the end-to-end setup of international business operations, including company formation, banking, compliance, operational design, and execution across cross-border environments.</p>
+        </div>
+      </div>
+      <div class="timeline-item reveal" style="transition-delay:0.15s">
+        <div class="timeline-date">EXPANSION · Singapore</div>
+        <div class="exp-card">
+          <h3>Singapore</h3>
+          <div class="exp-title">Regional Growth & Market Expansion</div>
+          <p>Supported partnership development, go-to-market execution, and regional business expansion by coordinating stakeholders and adapting strategies across international markets.</p>
+        </div>
+      </div>
+      <div class="timeline-item reveal" style="transition-delay:0.2s">
+        <div class="timeline-date">RELATIONSHIPS · Istanbul</div>
+        <div class="exp-card">
+          <h3>Istanbul</h3>
+          <div class="exp-title">Cross-Cultural Relationship Building</div>
+          <p>Built trusted relationships with international partners through communication, negotiation, stakeholder management, and long-term collaboration across different cultures.</p>
+        </div>
+      </div>
+      <div class="timeline-item reveal" style="transition-delay:0.25s">
+        <div class="timeline-date">AI · Paris</div>
+        <div class="exp-card">
+          <h3>Paris</h3>
+          <div class="exp-title">AI-Powered Product Building</div>
+          <p>Combined business thinking with AI-assisted development to build digital products, automate workflows, improve customer experiences, and transform ideas into scalable solutions.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="content-wrap">
 
   <!-- ══ SKILLS ══ -->
   <section id="skills" class="dark-section">
@@ -443,27 +358,24 @@
     </div>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 max-w-5xl mx-auto">
       <div class="skill-col reveal" style="transition-delay:0.1s">
-        <h3>Business Development</h3>
-        <span class="skill-pill">Partnership Development</span><span class="skill-pill">Market Expansion</span>
-        <span class="skill-pill">Commercial Negotiation</span><span class="skill-pill">Strategic Alliances</span>
+        <h3>Commercial Strategy</h3>
+        <span class="skill-pill">Business Development</span><span class="skill-pill">Commercial Analysis</span>
+        <span class="skill-pill">Market Research</span><span class="skill-pill">Stakeholder Management</span>
       </div>
       <div class="skill-col reveal" style="transition-delay:0.2s">
         <h3>Relationship & Operations</h3>
-        <span class="skill-pill">HNW Relationship Management</span><span class="skill-pill">Stakeholder Management</span>
-        <span class="skill-pill">Cross-Border Operations</span><span class="skill-pill">Cross-Cultural Communication</span>
-        <span class="skill-pill">Business Setup & Scaling</span>
+        <span class="skill-pill">Cross-Border Operations</span><span class="skill-pill">Business Expansion</span>
+        <span class="skill-pill">Operational Excellence</span><span class="skill-pill">Project Coordination</span>
       </div>
       <div class="skill-col reveal" style="transition-delay:0.3s">
         <h3>Data & Product</h3>
-        <span class="skill-pill">Commercial Analysis</span><span class="skill-pill">Business Intelligence</span>
-        <span class="skill-pill">Customer Segmentation</span><span class="skill-pill">Data-Driven Decisions</span>
-        <span class="skill-pill">Agile Delivery</span>
+        <span class="skill-pill">Business Analysis</span><span class="skill-pill">SQL & Tableau</span>
+        <span class="skill-pill">Growth Analytics</span><span class="skill-pill">Customer Insights</span>
       </div>
       <div class="skill-col reveal" style="transition-delay:0.4s">
-        <h3>AI & Building</h3>
+        <h3>AI Product Building</h3>
         <span class="skill-pill">AI-Assisted Development</span><span class="skill-pill">Workflow Automation</span>
-        <span class="skill-pill">Process Optimization</span><span class="skill-pill">MVP Building</span>
-        <span class="skill-pill">Digital Product Launch</span>
+        <span class="skill-pill">Digital Products</span><span class="skill-pill">Rapid Prototyping</span>
       </div>
     </div>
   </section>
@@ -476,24 +388,26 @@
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
       <div class="proj-card reveal" style="transition-delay:0.1s">
-        <div class="section-label">AI-assisted travel business building</div>
+        <div class="section-label">AI-Powered Luxury Travel Platform</div>
         <h3>Eastern Wander</h3>
-        <p>Built a premium inbound travel venture from concept to launch, covering market validation, service design, customer journey development, pricing strategy, and digital platform implementation.</p>
+        <p>Built and launched a 30+ page AI-assisted travel platform from scratch, designing website architecture, customer journeys, CRM workflows, database integration, inquiry systems, and deployment.</p>
+        <p style="font-size:0.82rem;line-height:1.7;color:rgba(240,237,230,0.55);margin-bottom:1rem;font-weight:300;">Built scalable service delivery and customer acquisition systems through partnerships, CRM workflows, and multi-channel growth strategies.</p>
         <div class="proj-tags">
-          <span class="skill-pill">Market Validation</span><span class="skill-pill">Service Design</span>
-          <span class="skill-pill">CRM Workflow</span><span class="skill-pill">Platform Launch</span>
+          <span class="skill-pill">Platform Architecture</span><span class="skill-pill">CRM Workflows</span>
+          <span class="skill-pill">Customer Journeys</span><span class="skill-pill">Growth Strategy</span>
         </div>
         <a href="https://www.easternwander.com" target="_blank" rel="noopener" class="proj-btn">
           Open Website <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
         </a>
       </div>
       <div class="proj-card reveal" style="transition-delay:0.2s">
-        <div class="section-label">100M+ user records translated into business insights</div>
+        <div class="section-label">Data-Driven Growth Analytics</div>
         <h3>Tableau Analyst</h3>
-        <p>Translated 100M+ user records into actionable business insights through customer segmentation, behavioural analysis, and decision-support reporting.</p>
+        <p>Used SQL, Tableau, and customer segmentation models to analyse large-scale user data, transforming customer behaviour into business insights that supported growth and commercial decision-making.</p>
+        <p style="font-size:0.82rem;line-height:1.7;color:rgba(240,237,230,0.55);margin-bottom:1rem;font-weight:300;">Designed interactive dashboards and data visualisations to improve decision-making through clear, actionable business insights.</p>
         <div class="proj-tags">
-          <span class="skill-pill">Customer Segmentation</span><span class="skill-pill">Behavioral Analysis</span>
-          <span class="skill-pill">Decision Support</span><span class="skill-pill">Business Intelligence</span>
+          <span class="skill-pill">SQL & Tableau</span><span class="skill-pill">Customer Segmentation</span>
+          <span class="skill-pill">Growth Analytics</span><span class="skill-pill">Business Intelligence</span>
         </div>
         <a href="https://bit.ly/49KpKIh" target="_blank" rel="noopener" class="proj-btn">
           Open Case Study <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
@@ -510,562 +424,188 @@
     </div>
     <div class="timeline">
       <div class="timeline-item reveal" style="transition-delay:0.1s">
+        <div class="timeline-date">2024.01 – 2025.08</div>
+        <div class="exp-card">
+          <h3>Family Office</h3>
+          <div class="exp-title">Founder Associate | Business Operations</div>
+          <p>Managed cross-border business operations and high-value stakeholder relationships across multiple international markets.</p>
+          <p style="font-size:0.82rem;line-height:1.7;color:rgba(240,237,230,0.55);margin-bottom:0.75rem;font-weight:300;">Led operational projects across five countries, coordinating legal advisors, banks, suppliers, and external partners to support business expansion.</p>
+          <p style="font-size:0.82rem;line-height:1.7;color:rgba(240,237,230,0.55);margin-bottom:0.75rem;font-weight:300;">Conducted commercial research and investment analysis across real estate, hospitality, AI, iGaming, and cross-border ventures.</p>
+          <p style="font-size:0.82rem;line-height:1.7;color:rgba(240,237,230,0.55);margin-bottom:1rem;font-weight:300;">Led the end-to-end setup of a UAE-based company, delivering full operational readiness from incorporation to operational infrastructure.</p>
+          <div class="exp-tags">
+            <span class="skill-pill">Cross-Border Operations</span><span class="skill-pill">Stakeholder Management</span>
+            <span class="skill-pill">Business Expansion</span><span class="skill-pill">Investment Research</span>
+          </div>
+        </div>
+      </div>
+      <div class="timeline-item reveal" style="transition-delay:0.2s">
         <div class="timeline-date">2025.12 – Present</div>
         <div class="exp-card">
           <h3>ApeX Protocol</h3>
-          <div class="exp-title">Global Business Development Manager</div>
-          <p>Built strategic partnerships across KOL, affiliate, and trading ecosystems, driving user acquisition, market visibility, and long-term revenue opportunities.</p>
+          <div class="exp-title">Business Development</div>
+          <p>Developed strategic partnerships for a Bybit-backed Top 10 decentralised exchange across European markets.</p>
+          <p style="font-size:0.82rem;line-height:1.7;color:rgba(240,237,230,0.55);margin-bottom:0.75rem;font-weight:300;">Evaluated over 500 KOLs, affiliates, and trading communities to identify commercially valuable partnership opportunities.</p>
+          <p style="font-size:0.82rem;line-height:1.7;color:rgba(240,237,230,0.55);margin-bottom:0.75rem;font-weight:300;">Designed ROI-driven partnership strategies balancing acquisition costs, incentives, and sustainable ecosystem growth.</p>
+          <p style="font-size:0.82rem;line-height:1.7;color:rgba(240,237,230,0.55);margin-bottom:1rem;font-weight:300;">Represented ApeX at major blockchain conferences, expanding ecosystem relationships and regional market visibility.</p>
           <div class="exp-tags">
             <span class="skill-pill">Partnership Growth</span><span class="skill-pill">Market Expansion</span>
             <span class="skill-pill">Affiliate Strategy</span><span class="skill-pill">Revenue Development</span>
           </div>
         </div>
       </div>
-      <div class="timeline-item reveal" style="transition-delay:0.2s">
-        <div class="timeline-date">2024.01 – 2025.08</div>
-        <div class="exp-card">
-          <h3>Family Office</h3>
-          <div class="exp-title">Founder Associate | Business Operations</div>
-          <p>Supported international business operations, investment research, and stakeholder management across six markets, coordinating cross-border projects and strategic initiatives for HNW clients.</p>
-          <div class="exp-tags">
-            <span class="skill-pill">HNW Relationships</span><span class="skill-pill">Investment Research</span>
-            <span class="skill-pill">Cross-Border Operations</span><span class="skill-pill">Business Expansion</span>
-          </div>
-        </div>
-      </div>
       <div class="timeline-item reveal" style="transition-delay:0.3s">
-        <div class="timeline-date">2023.09 – 2023.12</div>
-        <div class="exp-card">
-          <h3>RSM China</h3>
-          <div class="exp-title">Strategic Consulting Intern — GTM & Growth Strategy</div>
-          <p>Conducted market-entry and growth strategy analysis for global consumer brands, supporting commercial decision-making through research, interviews, and profitability assessment.</p>
-          <div class="exp-tags">
-            <span class="skill-pill">Market Entry Strategy</span><span class="skill-pill">Growth Analysis</span>
-            <span class="skill-pill">Commercial Research</span><span class="skill-pill">Profitability Modelling</span>
-          </div>
-        </div>
-      </div>
-      <div class="timeline-item reveal" style="transition-delay:0.4s">
         <div class="timeline-date">2021.10 – 2022.06</div>
         <div class="exp-card">
-          <h3>NetEase</h3>
+          <h3>NetEase Youdao</h3>
           <div class="exp-title">Growth Operations & Data Intern</div>
-          <p>Leveraged data analysis and customer segmentation to improve acquisition efficiency, engagement, and retention performance across key user groups.</p>
+          <p>Improved platform performance through data-driven analysis, customer segmentation, and growth operations.</p>
+          <p style="font-size:0.82rem;line-height:1.7;color:rgba(240,237,230,0.55);margin-bottom:0.75rem;font-weight:300;">Developed CRM dashboards and user segmentation models to support targeted acquisition strategies.</p>
+          <p style="font-size:0.82rem;line-height:1.7;color:rgba(240,237,230,0.55);margin-bottom:1rem;font-weight:300;">Improved engagement and retention of high-value users through content optimisation and community initiatives.</p>
           <div class="exp-tags">
-            <span class="skill-pill">Customer Analytics</span><span class="skill-pill">User Segmentation</span>
-            <span class="skill-pill">Growth Operations</span><span class="skill-pill">Retention Strategy</span>
+            <span class="skill-pill">Growth Analytics</span><span class="skill-pill">Customer Segmentation</span>
+            <span class="skill-pill">CRM Dashboards</span><span class="skill-pill">Retention Strategy</span>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ══ CONTACT ══ -->
-  <section id="contact">
-    <h2 class="contact-heading shiny-text shiny-heading reveal">Let's Connect</h2>
-    <div class="contact-grid reveal" style="transition-delay:0.1s">
-      <a href="mailto:xiajingyi33@gmail.com" class="contact-card">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
-        <span class="contact-oneline">xiajingyi33@gmail.com</span>
-      </a>
-      <a href="tel:+447502440219" class="contact-card">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-        <span class="contact-oneline">+44 7502 440219</span>
-      </a>
-      <a href="https://wa.me/447502440219" target="_blank" rel="noopener" class="contact-card">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-        <span>WhatsApp</span>
-      </a>
-      <a href="https://www.linkedin.com/in/spencerxia33" target="_blank" rel="noopener" class="contact-card">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="5" r="2"/>
-          <path d="M10 9h4v1.5h.1c.6-1.2 2.2-2.3 4.4-2.3 4.6 0 5.5 2.7 5.5 6.2V21h-4v-5.2c0-1.2 0-2.9-1.8-2.9s-2.1 1.5-2.1 3.1V21h-4V9z"/>
-        </svg>
-        <span>LinkedIn</span>
-      </a>
-    </div>
-    <a href="spencer-cv.pdf?v=20260624" class="resume-btn reveal" target="_blank" rel="noopener" style="transition-delay:0.2s">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>
-      View Resume
-    </a>
-  </section>
-
-    </div>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <!-- ══ CONTACT (no video background) ══ -->
+  <section id="contact">
+    <div class="contact-center">
+      <img class="contact-avatar reveal" src="public/portrait.png" alt="Jingyi Xia">
+      <h2 class="contact-heading shiny-text shiny-heading reveal">Let's Connect</h2>
+      <div class="contact-grid reveal" style="transition-delay:0.1s">
+        <a href="mailto:xiajingyi33@gmail.com" class="contact-card">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
+          <span class="contact-oneline">xiajingyi33@gmail.com</span>
+        </a>
+        <a href="tel:+447502440219" class="contact-card">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          <span class="contact-oneline">+44 7502 440219</span>
+        </a>
+        <a href="https://wa.me/447502440219" target="_blank" rel="noopener" class="contact-card">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+          <span>WhatsApp</span>
+        </a>
+        <a href="https://www.linkedin.com/in/spencerxia33" target="_blank" rel="noopener" class="contact-card">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="5" r="2"/>
+            <path d="M10 9h4v1.5h.1c.6-1.2 2.2-2.3 4.4-2.3 4.6 0 5.5 2.7 5.5 6.2V21h-4v-5.2c0-1.2 0-2.9-1.8-2.9s-2.1 1.5-2.1 3.1V21h-4V9z"/>
+          </svg>
+          <span>LinkedIn</span>
+        </a>
+      </div>
+      <a href="spencer-cv.pdf?v=20260624" class="resume-btn reveal" target="_blank" rel="noopener" style="transition-delay:0.2s">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>
+        View Resume
+      </a>
+    </div>
+  </section>
+
+  </div>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script>
   (function () {
     'use strict';
 
-    /* ── Nav scroll state ── */
     const siteNav = document.getElementById('siteNav');
+    const loader = document.getElementById('loader');
+    const loaderBar = document.getElementById('loaderProgress');
+    const globalVideo = document.getElementById('globalBgVideo');
+    const contactSection = document.getElementById('contact');
+
+    function scrollToContact() {
+      if (!contactSection) return;
+      contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
     window.addEventListener('scroll', () => {
       siteNav.classList.toggle('scrolled', window.scrollY > 80);
     }, { passive: true });
 
-    /* ── Reveal on scroll ── */
-    const revealEls = document.querySelectorAll('.reveal');
-    const revealObs = new IntersectionObserver((entries) => {
-      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-    }, { threshold: 0.2 });
-    revealEls.forEach(el => revealObs.observe(el));
-
-    /* ── Video journey ── */
-    const video = document.getElementById('journeyVideo');
-    const loader = document.getElementById('loader');
-    const loaderBar = document.getElementById('loaderProgress');
-    const heroOverlay = document.getElementById('heroOverlay');
-    const scrollHint = document.getElementById('scrollHint');
-    const careerTitle = document.getElementById('careerTitle');
-    const progressBar = document.getElementById('progressBar');
-
-    const CITY_IDS = ['cityIstanbul','cityDubai','cityLondon','citySingapore','cityParis'];
-
-    /* ── TrueFocus subtitle ── */
-    function initTrueFocus() {
-      const wrapper = document.getElementById('trueFocusSubtitle');
-      const frame = document.getElementById('focusFrame');
-      const containers = wrapper.querySelectorAll('.focus-container');
-      const allWords = [];
-      const blurAmount = 4;
-      const animationDuration = 0.5;
-      const pauseBetween = 1;
-      let currentIndex = 0;
-
-      containers.forEach(container => {
-        const parts = (container.dataset.sentence || '').split(' ');
-        parts.forEach(part => {
-          const span = document.createElement('span');
-          if (part === '·') {
-            span.className = 'focus-word sep';
-            span.textContent = '·';
-          } else {
-            span.className = 'focus-word';
-            span.textContent = part;
-            allWords.push(span);
-          }
-          container.appendChild(span);
-        });
+    document.querySelectorAll('a[href="#contact"]').forEach((link) => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        scrollToContact();
       });
+    });
 
-      function updateFocus() {
-        if (!allWords.length) return;
-        const parentRect = wrapper.getBoundingClientRect();
-        const active = allWords[currentIndex];
-        const r = active.getBoundingClientRect();
-        frame.style.transform = `translate(${r.left - parentRect.left}px, ${r.top - parentRect.top}px)`;
-        frame.style.width = r.width + 'px';
-        frame.style.height = r.height + 'px';
-        frame.classList.add('visible');
-        allWords.forEach((w, i) => {
-          w.classList.toggle('is-active', i === currentIndex);
-          w.style.filter = i === currentIndex ? 'blur(0px)' : `blur(${blurAmount}px)`;
-        });
-      }
-
-      setInterval(() => {
-        currentIndex = (currentIndex + 1) % allWords.length;
-        updateFocus();
-      }, (animationDuration + pauseBetween) * 1000);
-
-      updateFocus();
-      window.addEventListener('resize', updateFocus);
-      requestAnimationFrame(updateFocus);
-    }
-    if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(initTrueFocus);
-    } else {
-      initTrueFocus();
-    }
-
-    function buildPanels(duration) {
-      const s = duration / 14;
-      return [
-        { id: 'cityIstanbul',  start: 3.9 * s, end: 5.1 * s, fade: 0.28 * s },
-        { id: 'cityDubai',     start: 4.9 * s, end: 6.1 * s, fade: 0.28 * s },
-        { id: 'cityLondon',    start: 5.9 * s, end: 7.1 * s, fade: 0.28 * s },
-        { id: 'citySingapore', start: 6.9 * s, end: 9.1 * s, fade: 0.32 * s },
-        { id: 'cityParis',     start: 8.9 * s, end: 11.2 * s, fade: 0.32 * s },
-      ];
-    }
-
-    let PANELS = [], videoDuration = 14.6, videoReady = false;
-    let targetProgress = 0, smoothProgress = 0, rafId = null;
-
-    function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
-    function remap(p, a, b) { return b === a ? (p >= a ? 1 : 0) : clamp((p - a) / (b - a), 0, 1); }
-
-    function getVideoTime() {
-      if (videoReady && video.readyState >= 2 && isFinite(video.currentTime)) {
-        return video.currentTime;
-      }
-      return progressToTime(smoothProgress, videoDuration);
-    }
-
-    /* 前 25% 滚动对应肖像段（约 0–3.5s），保留人物镜头 */
-    function progressToTime(progress, duration) {
-      const portraitSec = 3.5 * (duration / 14);
-      const portraitScroll = 0.25;
-      if (progress <= portraitScroll) {
-        return (progress / portraitScroll) * portraitSec;
-      }
-      const rem = (progress - portraitScroll) / (1 - portraitScroll);
-      return portraitSec + rem * (duration - portraitSec);
-    }
-
-    function updateOverlays(t, scrollP) {
-      const s = videoDuration / 14;
-      const portraitEnd = 3.5 * s;
-      const heroFadeEnd = 4.2 * s;
-      const cardsPhaseStart = 3.8 * s;
-      const allTogetherFrom = 11.2 * s;
-
-      heroOverlay.style.opacity = t < portraitEnd ? 1 : 1 - remap(t, portraitEnd, heroFadeEnd);
-      scrollHint.style.opacity = t < portraitEnd * 0.9 ? 1 : 1 - remap(t, portraitEnd * 0.9, heroFadeEnd * 0.85);
-
-      /* CAREER JOURNEY 标题：地球段出现，城市卡片前淡出上移 */
-      const titleIn = 3.4 * s, titlePeak = 3.8 * s, titleOut = 5.2 * s;
-      if (t >= titleIn && t < titleOut) {
-        const op = t < titlePeak ? remap(t, titleIn, titlePeak) : 1 - remap(t, titlePeak, titleOut);
-        const shrink = remap(t, titlePeak, titleOut);
-        careerTitle.style.opacity = op;
-        careerTitle.style.transform = `translateY(${-shrink * 48}px) scale(${1 - shrink * 0.2})`;
-      } else {
-        careerTitle.style.opacity = 0;
-        careerTitle.style.transform = 'translateY(0) scale(1)';
-      }
-
-      /* 肖像段或未加载完成：绝不显示城市卡片 */
-      if (!videoReady || t < cardsPhaseStart) {
-        CITY_IDS.forEach(id => { document.getElementById(id).style.opacity = 0; });
-      } else if (t >= allTogetherFrom) {
-        CITY_IDS.forEach(id => { document.getElementById(id).style.opacity = 1; });
-      } else {
-        PANELS.forEach(({ id, start, end, fade }) => {
-          const el = document.getElementById(id);
-          if (t >= start && t <= end) {
-            el.style.opacity = Math.min(remap(t, start, start + fade), 1 - remap(t, end - fade, end));
-          } else { el.style.opacity = 0; }
-        });
-      }
-      progressBar.style.width = (scrollP * 100) + '%';
-    }
-
-    function tick() {
-      smoothProgress += (targetProgress - smoothProgress) * 0.06;
-      if (videoReady && video.readyState >= 2) {
-        const desired = progressToTime(smoothProgress, videoDuration);
-        if (!video.seeking && Math.abs(video.currentTime - desired) > 0.02) {
-          video.currentTime = clamp(desired, 0, Math.max(0, videoDuration - 0.04));
+    const revealEls = document.querySelectorAll('.reveal:not(.visible)');
+    const revealObs = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObs.unobserve(entry.target);
         }
-      }
-      updateOverlays(getVideoTime(), smoothProgress);
-      rafId = requestAnimationFrame(tick);
-    }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
+    revealEls.forEach((el) => revealObs.observe(el));
 
-    function onReady() {
-      if (videoReady) return;
-      if (!video.duration || video.readyState < 2) return;
-      videoDuration = video.duration;
-      PANELS = buildPanels(videoDuration);
-      video.pause();
-      video.currentTime = 0;
-      videoReady = true;
+    let loaderHidden = false;
+    function hideLoader() {
+      if (loaderHidden) return;
+      loaderHidden = true;
       loaderBar.style.width = '100%';
       setTimeout(() => loader.classList.add('hidden'), 400);
-      updateOverlays(0, 0);
     }
 
-    function tryNextSource() {
-      const first = video.querySelector('source');
-      if (first) {
-        first.remove();
-        video.load();
-        return true;
+    function initGlobalVideo() {
+      if (!globalVideo) {
+        hideLoader();
+        return;
       }
-      return false;
-    }
 
-    video.addEventListener('progress', () => {
-      if (video.buffered.length && video.duration)
-        loaderBar.style.width = Math.min(video.buffered.end(0) / video.duration * 100, 95) + '%';
-    });
-    video.addEventListener('loadedmetadata', () => {
-      if (video.duration) {
-        videoDuration = video.duration;
-        PANELS = buildPanels(videoDuration);
-      }
-    });
-    video.addEventListener('canplaythrough', onReady, { once: true });
-    video.addEventListener('error', () => {
-      if (tryNextSource()) return;
-      loader.innerHTML = '<span style="color:rgba(240,237,230,0.5);font-size:0.8rem;">视频加载失败，请刷新或换 Safari 打开</span>';
-    });
-    video.load();
+      const globalVideoBg = document.getElementById('globalVideoBg');
 
-    function initScroll() {
-      gsap.registerPlugin(ScrollTrigger);
-      gsap.timeline({
-        scrollTrigger: {
-          trigger: '#journeySection', start: 'top top', end: 'bottom bottom',
-          scrub: 1, pin: false,
-          onUpdate: (self) => { targetProgress = self.progress; },
-        },
-      });
-      targetProgress = 0; smoothProgress = 0;
-      updateOverlays(0, 0);
-    }
-
-    initScroll();
-    tick();
-
-    /* ── Beams background (vanilla Three.js) ── */
-    function initBeams() {
-      const ctn = document.getElementById('galaxyBg');
-      const wrap = document.getElementById('galaxyWrap');
-      if (!ctn || !wrap || typeof THREE === 'undefined') return;
-
-      const cfg = {
-        beamWidth: 2, beamHeight: 15, beamNumber: 12,
-        lightColor: '#ffffff', speed: 2, noiseIntensity: 1.75,
-        scale: 0.2, rotation: 0
+      const playVideo = () => {
+        globalVideo.play().catch(() => {});
       };
 
-      const noiseGLSL = `
-        float random(in vec2 st) {
-          return fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);
-        }
-        float noise(in vec2 st) {
-          vec2 i = floor(st);
-          vec2 f = fract(st);
-          float a = random(i);
-          float b = random(i + vec2(1.0, 0.0));
-          float c = random(i + vec2(0.0, 1.0));
-          float d = random(i + vec2(1.0, 1.0));
-          vec2 u = f * f * (3.0 - 2.0 * f);
-          return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
-        }
-        vec4 permute(vec4 x) { return mod(((x * 34.0) + 1.0) * x, 289.0); }
-        vec4 taylorInvSqrt(vec4 r) { return 1.79284291400159 - 0.85373472095314 * r; }
-        vec3 fade(vec3 t) { return t * t * t * (t * (t * 6.0 - 15.0) + 10.0); }
-        float cnoise(vec3 P) {
-          vec3 Pi0 = floor(P);
-          vec3 Pi1 = Pi0 + vec3(1.0);
-          Pi0 = mod(Pi0, 289.0);
-          Pi1 = mod(Pi1, 289.0);
-          vec3 Pf0 = fract(P);
-          vec3 Pf1 = Pf0 - vec3(1.0);
-          vec4 ix = vec4(Pi0.x, Pi1.x, Pi0.x, Pi1.x);
-          vec4 iy = vec4(Pi0.yy, Pi1.yy);
-          vec4 iz0 = Pi0.zzzz;
-          vec4 iz1 = Pi1.zzzz;
-          vec4 ixy = permute(permute(ix) + iy);
-          vec4 ixy0 = permute(ixy + iz0);
-          vec4 ixy1 = permute(ixy + iz1);
-          vec4 gx0 = ixy0 / 7.0;
-          vec4 gy0 = fract(floor(gx0) / 7.0) - 0.5;
-          gx0 = fract(gx0);
-          vec4 gz0 = vec4(0.5) - abs(gx0) - abs(gy0);
-          vec4 sz0 = step(gz0, vec4(0.0));
-          gx0 -= sz0 * (step(0.0, gx0) - 0.5);
-          gy0 -= sz0 * (step(0.0, gy0) - 0.5);
-          vec4 gx1 = ixy1 / 7.0;
-          vec4 gy1 = fract(floor(gx1) / 7.0) - 0.5;
-          gx1 = fract(gx1);
-          vec4 gz1 = vec4(0.5) - abs(gx1) - abs(gy1);
-          vec4 sz1 = step(gz1, vec4(0.0));
-          gx1 -= sz1 * (step(0.0, gx1) - 0.5);
-          gy1 -= sz1 * (step(0.0, gy1) - 0.5);
-          vec3 g000 = vec3(gx0.x, gy0.x, gz0.x);
-          vec3 g100 = vec3(gx0.y, gy0.y, gz0.y);
-          vec3 g010 = vec3(gx0.z, gy0.z, gz0.z);
-          vec3 g110 = vec3(gx0.w, gy0.w, gz0.w);
-          vec3 g001 = vec3(gx1.x, gy1.x, gz1.x);
-          vec3 g101 = vec3(gx1.y, gy1.y, gz1.y);
-          vec3 g011 = vec3(gx1.z, gy1.z, gz1.z);
-          vec3 g111 = vec3(gx1.w, gy1.w, gz1.w);
-          vec4 norm0 = taylorInvSqrt(vec4(dot(g000,g000), dot(g010,g010), dot(g100,g100), dot(g110,g110)));
-          g000 *= norm0.x; g010 *= norm0.y; g100 *= norm0.z; g110 *= norm0.w;
-          vec4 norm1 = taylorInvSqrt(vec4(dot(g001,g001), dot(g011,g011), dot(g101,g101), dot(g111,g111)));
-          g001 *= norm1.x; g011 *= norm1.y; g101 *= norm1.z; g111 *= norm1.w;
-          float n000 = dot(g000, Pf0);
-          float n100 = dot(g100, vec3(Pf1.x, Pf0.yz));
-          float n010 = dot(g010, vec3(Pf0.x, Pf1.y, Pf0.z));
-          float n110 = dot(g110, vec3(Pf1.xy, Pf0.z));
-          float n001 = dot(g001, vec3(Pf0.xy, Pf1.z));
-          float n101 = dot(g101, vec3(Pf1.x, Pf0.y, Pf1.z));
-          float n011 = dot(g011, vec3(Pf0.x, Pf1.yz));
-          float n111 = dot(g111, Pf1);
-          vec3 fade_xyz = fade(Pf0);
-          vec4 n_z = mix(vec4(n000, n100, n010, n110), vec4(n001, n101, n011, n111), fade_xyz.z);
-          vec2 n_yz = mix(n_z.xy, n_z.zw, fade_xyz.y);
-          float n_xyz = mix(n_yz.x, n_yz.y, fade_xyz.x);
-          return 2.2 * n_xyz;
-        }
-      `;
-
-      function extendBeamMaterial(BaseMaterial, materialCfg) {
-        const physical = THREE.ShaderLib.physical;
-        const uniforms = THREE.UniformsUtils.clone(physical.uniforms);
-        const defaults = new BaseMaterial(materialCfg.material || {});
-        if (defaults.color) uniforms.diffuse.value = defaults.color;
-        if ('roughness' in defaults) uniforms.roughness.value = defaults.roughness;
-        if ('metalness' in defaults) uniforms.metalness.value = defaults.metalness;
-        Object.entries(materialCfg.uniforms || {}).forEach(([key, u]) => {
-          uniforms[key] = u !== null && typeof u === 'object' && 'value' in u ? u : { value: u };
-        });
-        let vert = materialCfg.header + '\n' + (materialCfg.vertexHeader || '') + '\n' + physical.vertexShader;
-        let frag = materialCfg.header + '\n' + (materialCfg.fragmentHeader || '') + '\n' + physical.fragmentShader;
-        Object.entries(materialCfg.vertex || {}).forEach(([inc, code]) => { vert = vert.replace(inc, inc + '\n' + code); });
-        Object.entries(materialCfg.fragment || {}).forEach(([inc, code]) => { frag = frag.replace(inc, inc + '\n' + code); });
-        return new THREE.ShaderMaterial({
-          defines: Object.assign({}, physical.defines),
-          uniforms,
-          vertexShader: vert,
-          fragmentShader: frag,
-          lights: true,
-          fog: !!(materialCfg.material && materialCfg.material.fog)
-        });
-      }
-
-      function createStackedPlanesBufferGeometry(n, width, height, spacing, heightSegments) {
-        const geometry = new THREE.BufferGeometry();
-        const numVertices = n * (heightSegments + 1) * 2;
-        const numFaces = n * heightSegments * 2;
-        const positions = new Float32Array(numVertices * 3);
-        const indices = new Uint32Array(numFaces * 3);
-        const uvs = new Float32Array(numVertices * 2);
-        let vertexOffset = 0, indexOffset = 0, uvOffset = 0;
-        const totalWidth = n * width + (n - 1) * spacing;
-        const xOffsetBase = -totalWidth / 2;
-        for (let i = 0; i < n; i++) {
-          const xOffset = xOffsetBase + i * (width + spacing);
-          const uvXOffset = Math.random() * 300;
-          const uvYOffset = Math.random() * 300;
-          for (let j = 0; j <= heightSegments; j++) {
-            const y = height * (j / heightSegments - 0.5);
-            positions.set([xOffset, y, 0, xOffset + width, y, 0], vertexOffset * 3);
-            const uvY = j / heightSegments;
-            uvs.set([uvXOffset, uvY + uvYOffset, uvXOffset + 1, uvY + uvYOffset], uvOffset);
-            if (j < heightSegments) {
-              const a = vertexOffset, b = vertexOffset + 1, c = vertexOffset + 2, d = vertexOffset + 3;
-              indices.set([a, b, c, c, b, d], indexOffset);
-              indexOffset += 6;
+      if (contactSection && globalVideoBg) {
+        const contactObs = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              globalVideoBg.style.visibility = 'hidden';
+              globalVideo.pause();
+            } else {
+              globalVideoBg.style.visibility = 'visible';
+              playVideo();
             }
-            vertexOffset += 2;
-            uvOffset += 4;
-          }
-        }
-        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-        geometry.setAttribute('uv', new THREE.BufferAttribute(uvs, 2));
-        geometry.setIndex(new THREE.BufferAttribute(indices, 1));
-        geometry.computeVertexNormals();
-        return geometry;
+          });
+        }, { threshold: 0.15 });
+        contactObs.observe(contactSection);
       }
 
-      const beamMaterial = extendBeamMaterial(THREE.MeshStandardMaterial, {
-        header: `
-          varying vec3 vEye;
-          varying float vNoise;
-          varying vec2 vUv;
-          varying vec3 vPosition;
-          uniform float time;
-          uniform float uSpeed;
-          uniform float uNoiseIntensity;
-          uniform float uScale;
-          ${noiseGLSL}`,
-        vertexHeader: `
-          float getPos(vec3 pos) {
-            vec3 noisePos = vec3(pos.x * 0., pos.y - uv.y, pos.z + time * uSpeed * 3.) * uScale;
-            return cnoise(noisePos);
-          }
-          vec3 getCurrentPos(vec3 pos) {
-            vec3 newpos = pos;
-            newpos.z += getPos(pos);
-            return newpos;
-          }
-          vec3 getNormal(vec3 pos) {
-            vec3 curpos = getCurrentPos(pos);
-            vec3 nextposX = getCurrentPos(pos + vec3(0.01, 0.0, 0.0));
-            vec3 nextposZ = getCurrentPos(pos + vec3(0.0, -0.01, 0.0));
-            vec3 tangentX = normalize(nextposX - curpos);
-            vec3 tangentZ = normalize(nextposZ - curpos);
-            return normalize(cross(tangentZ, tangentX));
-          }`,
-        vertex: {
-          '#include <begin_vertex>': 'transformed.z += getPos(transformed.xyz);',
-          '#include <beginnormal_vertex>': 'objectNormal = getNormal(position.xyz);'
-        },
-        fragment: {
-          '#include <dithering_fragment>': 'float randomNoise = noise(gl_FragCoord.xy); gl_FragColor.rgb -= randomNoise / 15. * uNoiseIntensity;'
-        },
-        material: { fog: true },
-        uniforms: {
-          diffuse: new THREE.Color(0x000000),
-          time: { value: 0 },
-          roughness: 0.3,
-          metalness: 0.3,
-          uSpeed: { value: cfg.speed },
-          envMapIntensity: 10,
-          uNoiseIntensity: cfg.noiseIntensity,
-          uScale: cfg.scale
+      globalVideo.addEventListener('progress', () => {
+        if (globalVideo.buffered.length && globalVideo.duration) {
+          loaderBar.style.width = Math.min(globalVideo.buffered.end(0) / globalVideo.duration * 100, 95) + '%';
         }
       });
 
-      const scene = new THREE.Scene();
-      scene.background = new THREE.Color(0x08080C);
+      const onVideoReady = () => {
+        playVideo();
+        hideLoader();
+      };
+      globalVideo.addEventListener('loadeddata', onVideoReady, { once: true });
+      globalVideo.addEventListener('canplay', onVideoReady, { once: true });
+      globalVideo.addEventListener('playing', hideLoader, { once: true });
 
-      const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 100);
-      camera.position.set(0, 0, 20);
+      globalVideo.addEventListener('error', () => {
+        hideLoader();
+      });
 
-      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-      renderer.domElement.style.width = '100%';
-      renderer.domElement.style.height = '100%';
-      ctn.appendChild(renderer.domElement);
+      setTimeout(hideLoader, 2500);
 
-      const group = new THREE.Group();
-      group.rotation.z = cfg.rotation * Math.PI / 180;
-      scene.add(group);
-
-      const geometry = createStackedPlanesBufferGeometry(cfg.beamNumber, cfg.beamWidth, cfg.beamHeight, 0, 100);
-      const beamMesh = new THREE.Mesh(geometry, beamMaterial);
-      group.add(beamMesh);
-
-      scene.add(new THREE.AmbientLight(0xffffff, 1));
-      const dirLight = new THREE.DirectionalLight(cfg.lightColor, 1);
-      dirLight.position.set(0, 3, 10);
-      scene.add(dirLight);
-
-      const clock = new THREE.Clock();
-
-      function resize() {
-        const w = wrap.clientWidth, h = wrap.clientHeight;
-        if (w < 2 || h < 2) return;
-        renderer.setSize(w, h, false);
-        camera.aspect = w / h;
-        camera.updateProjectionMatrix();
-      }
-
-      function animate() {
-        requestAnimationFrame(animate);
-        beamMaterial.uniforms.time.value += 0.1 * clock.getDelta();
-        renderer.render(scene, camera);
-      }
-
-      resize();
-      animate();
-      window.addEventListener('resize', resize);
-      if (typeof ResizeObserver !== 'undefined') {
-        new ResizeObserver(resize).observe(wrap);
-      }
-      setTimeout(resize, 100);
-      setTimeout(resize, 500);
+      globalVideo.load();
+      playVideo();
     }
-    window.addEventListener('load', () => requestAnimationFrame(initBeams));
+
+    initGlobalVideo();
   })();
   </script>
 </body>
