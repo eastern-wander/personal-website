@@ -19,9 +19,7 @@
       overflow: hidden; pointer-events: none;
     }
     #globalBgVideo {
-      position: absolute; top: 50%; left: 50%;
-      min-width: 100%; min-height: 100%; width: auto; height: auto;
-      transform: translate(-50%, -50%);
+      position: absolute; inset: 0; width: 100%; height: 100%;
       object-fit: cover; display: block;
     }
     #globalVideoOverlay {
@@ -53,7 +51,16 @@
       font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 500;
       color: #F0EDE6; text-decoration: none; letter-spacing: 0.15em;
     }
-    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-actions { display: flex; align-items: center; gap: clamp(1rem, 2.5vw, 2rem); }
+    .nav-links { display: flex; align-items: center; gap: 2rem; list-style: none; }
+    .nav-linkedin {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 36px; height: 36px; color: #F0EDE6;
+      border-radius: 4px; transition: color 0.25s, background 0.25s;
+    }
+    .nav-linkedin:hover { color: #C9A84C; background: rgba(201,168,76,0.08); }
+    .nav-linkedin:focus-visible { outline: 2px solid #C9A84C; outline-offset: 3px; }
+    .nav-linkedin svg { width: 22px; height: 22px; }
     .nav-links a {
       position: relative; font-size: 13px; text-transform: uppercase; letter-spacing: 0.1em;
       color: #F0EDE6; text-decoration: none; font-weight: 400; padding-bottom: 4px;
@@ -119,19 +126,6 @@
       display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
     }
     .scroll-hint-text { font-size: 0.65rem; letter-spacing: 0.35em; color: rgba(240,237,230,0.4); font-weight: 300; text-transform: uppercase; display: flex; align-items: center; gap: 0.4rem; }
-    .contact-center { max-width: 720px; margin: 0 auto; text-align: center; }
-    .contact-center .contact-heading { margin-bottom: 2rem; }
-    .contact-center .contact-grid { margin-bottom: 0; }
-    .contact-avatar {
-      width: 96px; height: 96px;
-      border-radius: 50%;
-      object-fit: cover; object-position: top center;
-      border: 1px solid rgba(201, 168, 76, 0.35);
-      margin: 0 auto 1.5rem;
-      display: block;
-      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35);
-    }
-
     /* ── Section titles ── */
     .section-title {
       font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 500;
@@ -182,8 +176,6 @@
     }
     .proj-btn:hover { background: #C9A84C; color: #08080C; }
 
-    .contact-oneline { white-space: nowrap; font-size: 0.72rem; letter-spacing: 0.01em; }
-
     /* ── Timeline Experience ── */
     .timeline { max-width: 720px; margin: 0 auto; position: relative; padding-left: 2rem; }
     .timeline::before {
@@ -206,36 +198,13 @@
     .exp-card h3 { font-size: 1.15rem; font-weight: 600; color: #F0EDE6; margin-bottom: 0.25rem; }
     .exp-card .exp-title { font-size: 0.85rem; font-weight: 400; color: rgba(240,237,230,0.65); margin-bottom: 0.85rem; }
     .exp-card p { font-size: 0.82rem; line-height: 1.7; color: rgba(240,237,230,0.55); margin-bottom: 1rem; font-weight: 300; }
-    .exp-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; }
-
-    /* ── Contact (no global video) ── */
-    #contact {
-      background: #08080C; padding: 5rem 2rem 6rem; text-align: center;
-      position: relative; z-index: 3;
-      min-height: 100vh;
-      scroll-margin-top: 5rem;
+    .experience-details {
+      list-style: disc; padding-left: 1.1rem; margin: 0;
+      font-size: 0.82rem; line-height: 1.7; color: rgba(240,237,230,0.72); font-weight: 300;
     }
+    .experience-details li + li { margin-top: 0.6rem; }
 
     .content-wrap { position: relative; z-index: 1; }
-    .contact-heading { font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 500; color: #F0EDE6; margin-bottom: 3rem; letter-spacing: 0.06em; }
-    .contact-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; max-width: 960px; margin: 0 auto; }
-    .contact-card {
-      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.75rem;
-      padding: 2rem 1rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);
-      background: rgba(255,255,255,0.02); text-decoration: none; color: #F0EDE6;
-      transition: border-color 0.3s, transform 0.3s, background 0.3s;
-      font-size: 0.8rem; font-weight: 300; line-height: 1.5;
-    }
-    .contact-card:hover { border-color: #C9A84C; transform: translateY(-4px); background: rgba(201,168,76,0.05); }
-    .contact-card svg { opacity: 0.6; }
-    .resume-btn {
-      display: inline-flex; align-items: center; gap: 0.5rem; margin-top: 2.5rem;
-      background: transparent; border: 1px solid rgba(255,255,255,0.2);
-      color: #F0EDE6; padding: 0.75rem 1.75rem; border-radius: 4px; font-size: 0.8rem;
-      letter-spacing: 0.1em; text-decoration: none; transition: background 0.3s, color 0.3s, border-color 0.3s;
-    }
-    .resume-btn:hover { background: #C9A84C; color: #08080C; border-color: #C9A84C; }
-
     #loader {
       position: fixed; inset: 0; z-index: 100; background: #08080C;
       display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.5rem; transition: opacity 0.6s;
@@ -249,11 +218,10 @@
       .nav-links a { font-size: 11px; }
       .hero-copy-left { left: 1.25rem; bottom: 8%; max-width: 92%; font-size: clamp(1.35rem, 6vw, 1.75rem); }
       .hero-tagline-right { right: 1.25rem; top: 28%; max-width: 48%; font-size: 12px; }
-      .contact-grid { grid-template-columns: repeat(2, 1fr); }
       .proj-card h3 { font-size: 28px; }
-      .section-title, .contact-heading { font-size: 28px; }
+      .section-title { font-size: 28px; }
     }
-    @media (max-width: 480px) {
+    @media (max-width: 640px) {
       .nav-links { display: none; }
     }
   </style>
@@ -267,8 +235,7 @@
 
   <div id="globalVideoBg" aria-hidden="true">
     <video id="globalBgVideo" autoplay muted loop playsinline webkit-playsinline preload="auto">
-      <source src="public/background45-h264.m4v" type="video/mp4">
-      <source src="public/background45.mov" type="video/quicktime">
+      <source src="public/background-silent.mp4" type="video/mp4">
     </video>
     <div id="globalVideoOverlay"></div>
   </div>
@@ -278,13 +245,20 @@
   <!-- ══ NAV ══ -->
   <nav id="siteNav">
     <a href="#about" class="nav-logo">JX</a>
+    <div class="nav-actions">
     <ul class="nav-links">
       <li><a href="#about">About</a></li>
       <li><a href="#skills">Skills</a></li>
       <li><a href="#projects">Projects</a></li>
       <li><a href="#experience">Experience</a></li>
-      <li><a href="#contact">Contact</a></li>
+      <li><a href="https://www.linkedin.com/in/spencerxia33" target="_blank" rel="noopener">Contact</a></li>
     </ul>
+    <a class="nav-linkedin" href="https://www.linkedin.com/in/spencerxia33" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M20.45 2H3.55C2.69 2 2 2.68 2 3.52v16.96c0 .84.69 1.52 1.55 1.52h16.9c.86 0 1.55-.68 1.55-1.52V3.52c0-.84-.69-1.52-1.55-1.52ZM7.93 18.75H4.98V9.2h2.95v9.55ZM6.45 7.9a1.71 1.71 0 1 1 0-3.42 1.71 1.71 0 0 1 0 3.42Zm12.3 10.85H15.8V14.1c0-1.11-.02-2.54-1.55-2.54-1.55 0-1.79 1.21-1.79 2.46v4.73H9.51V9.2h2.83v1.3h.04c.4-.75 1.36-1.55 2.79-1.55 2.98 0 3.58 1.97 3.58 4.53v5.27Z"/>
+      </svg>
+    </a>
+    </div>
   </nav>
 
   <!-- ══ HERO (Page 1) ══ -->
@@ -424,47 +398,54 @@
     </div>
     <div class="timeline">
       <div class="timeline-item reveal" style="transition-delay:0.1s">
-        <div class="timeline-date">2024.01 – 2025.08</div>
+        <div class="timeline-date">2026.01 – 2026.10</div>
         <div class="exp-card">
-          <h3>Family Office</h3>
-          <div class="exp-title">Founder Associate | Business Operations</div>
-          <p>Managed cross-border business operations and high-value stakeholder relationships across multiple international markets.</p>
-          <p style="font-size:0.82rem;line-height:1.7;color:rgba(240,237,230,0.55);margin-bottom:0.75rem;font-weight:300;">Led operational projects across five countries, coordinating legal advisors, banks, suppliers, and external partners to support business expansion.</p>
-          <p style="font-size:0.82rem;line-height:1.7;color:rgba(240,237,230,0.55);margin-bottom:0.75rem;font-weight:300;">Conducted commercial research and investment analysis across real estate, hospitality, AI, iGaming, and cross-border ventures.</p>
-          <p style="font-size:0.82rem;line-height:1.7;color:rgba(240,237,230,0.55);margin-bottom:1rem;font-weight:300;">Led the end-to-end setup of a UAE-based company, delivering full operational readiness from incorporation to operational infrastructure.</p>
-          <div class="exp-tags">
-            <span class="skill-pill">Cross-Border Operations</span><span class="skill-pill">Stakeholder Management</span>
-            <span class="skill-pill">Business Expansion</span><span class="skill-pill">Investment Research</span>
-          </div>
+          <h3>ApeX Protocol</h3>
+          <div class="exp-title">Business Development · Web3 Decentralized Exchange</div>
+          <ul class="experience-details">
+            <li>Developed European partnerships for ApeX, a Bybit-backed decentralised exchange. Secured and managed a regional partner across SEO, traders and KOLs, generating peak monthly perpetual futures volume of USDT 66.1 million.</li>
+            <li>Built a CRM pipeline of 500+ prospective partners, assessing audience fit, performance, credibility and projected ROI; secured and sustained five active, long-term partnerships.</li>
+            <li>Negotiated terms and co-designed promotions, balancing upfront payments, fee rebates, budgets and expected volume; managed onboarding, campaign execution and partner relationships.</li>
+            <li>Benchmarked competitor commissions and promotions to support negotiations and partnership approval.</li>
+            <li>Represented ApeX at ETHCC, Paris Blockchain Week and regional events, developing European partner relationships.</li>
+          </ul>
         </div>
       </div>
       <div class="timeline-item reveal" style="transition-delay:0.2s">
-        <div class="timeline-date">2025.12 – Present</div>
+        <div class="timeline-date">2024.01 – 2025.08</div>
         <div class="exp-card">
-          <h3>ApeX Protocol</h3>
-          <div class="exp-title">Business Development</div>
-          <p>Developed strategic partnerships for a Bybit-backed Top 10 decentralised exchange across European markets.</p>
-          <p style="font-size:0.82rem;line-height:1.7;color:rgba(240,237,230,0.55);margin-bottom:0.75rem;font-weight:300;">Evaluated over 500 KOLs, affiliates, and trading communities to identify commercially valuable partnership opportunities.</p>
-          <p style="font-size:0.82rem;line-height:1.7;color:rgba(240,237,230,0.55);margin-bottom:0.75rem;font-weight:300;">Designed ROI-driven partnership strategies balancing acquisition costs, incentives, and sustainable ecosystem growth.</p>
-          <p style="font-size:0.82rem;line-height:1.7;color:rgba(240,237,230,0.55);margin-bottom:1rem;font-weight:300;">Represented ApeX at major blockchain conferences, expanding ecosystem relationships and regional market visibility.</p>
-          <div class="exp-tags">
-            <span class="skill-pill">Partnership Growth</span><span class="skill-pill">Market Expansion</span>
-            <span class="skill-pill">Affiliate Strategy</span><span class="skill-pill">Revenue Development</span>
-          </div>
+          <h3>Private Office</h3>
+          <div class="exp-title">Personal Assistant &amp; Business Operations</div>
+          <ul class="experience-details">
+            <li>Led UAE entity setup to operational readiness within one month, coordinating incorporation, banking/KYC, visas, vendor onboarding and compliance.</li>
+            <li>Managed an RMB 3-4 million, 800 sqm headquarters setup, covering supplier selection, contract review and delivery. Resolved contractor and supplier delays to restore the schedule and launch on time.</li>
+            <li>Supported investments across the UK, UAE, Türkiye, Singapore and France: commercial due diligence and regulatory coordination for an AED 30 million investment; payment documentation and stakeholder follow-up for a separate AED 50 million property investment.</li>
+            <li>Built local service-provider, business and partner networks in unfamiliar markets within 2-4 weeks through research, referrals, networking, outreach and site visits to assess suitability.</li>
+            <li>Managed international visits for dozens of private clients and business guests, typically groups of 4-6; owned itineraries, budgets, travel logistics and on-site accompaniment, resolving last-minute entry, accommodation and scheduling issues.</li>
+            <li>Represented the principal in client meetings, interpreted discussions, coordinated introductions and assessed client interests for follow-up. Personalised service and gifting earned repeat requests and referrals.</li>
+          </ul>
         </div>
       </div>
       <div class="timeline-item reveal" style="transition-delay:0.3s">
+        <div class="timeline-date">2023.09 – 2023.12</div>
+        <div class="exp-card">
+          <h3>RSM</h3>
+          <div class="exp-title">Strategic Consulting Intern</div>
+          <ul class="experience-details">
+            <li>Designed and conducted 30+ consumer and expert interviews across Tier 1-3 cities, informing client-adopted targeting and marketing recommendations. Following implementation, the client recorded 18% year-on-year sales growth in Tier 3 markets.</li>
+            <li>Compiled research and populated existing DTC-versus-retail profitability models, supporting rollout scenarios projected to bring breakeven forward by four months.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="timeline-item reveal" style="transition-delay:0.4s">
         <div class="timeline-date">2021.10 – 2022.06</div>
         <div class="exp-card">
           <h3>NetEase Youdao</h3>
-          <div class="exp-title">Growth Operations & Data Intern</div>
-          <p>Improved platform performance through data-driven analysis, customer segmentation, and growth operations.</p>
-          <p style="font-size:0.82rem;line-height:1.7;color:rgba(240,237,230,0.55);margin-bottom:0.75rem;font-weight:300;">Developed CRM dashboards and user segmentation models to support targeted acquisition strategies.</p>
-          <p style="font-size:0.82rem;line-height:1.7;color:rgba(240,237,230,0.55);margin-bottom:1rem;font-weight:300;">Improved engagement and retention of high-value users through content optimisation and community initiatives.</p>
-          <div class="exp-tags">
-            <span class="skill-pill">Growth Analytics</span><span class="skill-pill">Customer Segmentation</span>
-            <span class="skill-pill">CRM Dashboards</span><span class="skill-pill">Retention Strategy</span>
-          </div>
+          <div class="exp-title">Growth Operations &amp; Data Intern</div>
+          <ul class="experience-details">
+            <li>Analysed reviews and purchase journeys in BI dashboards; developed a customer-guidance SOP addressing information gaps, contributing to an approximately 5% improvement in store ratings within one month.</li>
+            <li>Engaged high-intent users through educational content, check-ins, rewards and Q&amp;A, maintaining approximately 90% observed community membership retention over four months.</li>
+          </ul>
         </div>
       </div>
     </div>
@@ -472,43 +453,9 @@
 
   </div>
 
-  <!-- ══ CONTACT (no video background) ══ -->
-  <section id="contact">
-    <div class="contact-center">
-      <img class="contact-avatar reveal" src="public/portrait.png" alt="Jingyi Xia">
-      <h2 class="contact-heading shiny-text shiny-heading reveal">Let's Connect</h2>
-      <div class="contact-grid reveal" style="transition-delay:0.1s">
-        <a href="mailto:xiajingyi33@gmail.com" class="contact-card">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
-          <span class="contact-oneline">xiajingyi33@gmail.com</span>
-        </a>
-        <a href="tel:+447502440219" class="contact-card">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-          <span class="contact-oneline">+44 7502 440219</span>
-        </a>
-        <a href="https://wa.me/447502440219" target="_blank" rel="noopener" class="contact-card">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-          <span>WhatsApp</span>
-        </a>
-        <a href="https://www.linkedin.com/in/spencerxia33" target="_blank" rel="noopener" class="contact-card">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="5" r="2"/>
-            <path d="M10 9h4v1.5h.1c.6-1.2 2.2-2.3 4.4-2.3 4.6 0 5.5 2.7 5.5 6.2V21h-4v-5.2c0-1.2 0-2.9-1.8-2.9s-2.1 1.5-2.1 3.1V21h-4V9z"/>
-          </svg>
-          <span>LinkedIn</span>
-        </a>
-      </div>
-      <a href="spencer-cv.pdf?v=20260624" class="resume-btn reveal" target="_blank" rel="noopener" style="transition-delay:0.2s">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>
-        View Resume
-      </a>
-    </div>
-  </section>
 
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script>
   (function () {
     'use strict';
@@ -517,23 +464,9 @@
     const loader = document.getElementById('loader');
     const loaderBar = document.getElementById('loaderProgress');
     const globalVideo = document.getElementById('globalBgVideo');
-    const contactSection = document.getElementById('contact');
-
-    function scrollToContact() {
-      if (!contactSection) return;
-      contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-
     window.addEventListener('scroll', () => {
       siteNav.classList.toggle('scrolled', window.scrollY > 80);
     }, { passive: true });
-
-    document.querySelectorAll('a[href="#contact"]').forEach((link) => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        scrollToContact();
-      });
-    });
 
     const revealEls = document.querySelectorAll('.reveal:not(.visible)');
     const revealObs = new IntersectionObserver((entries) => {
@@ -560,26 +493,21 @@
         return;
       }
 
-      const globalVideoBg = document.getElementById('globalVideoBg');
-
-      const playVideo = () => {
-        globalVideo.play().catch(() => {});
-      };
-
-      if (contactSection && globalVideoBg) {
-        const contactObs = new IntersectionObserver((entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              globalVideoBg.style.visibility = 'hidden';
-              globalVideo.pause();
-            } else {
-              globalVideoBg.style.visibility = 'visible';
-              playVideo();
-            }
+      globalVideo.muted = true;
+      function playVideo() {
+        if (!document.hidden && globalVideo.paused && !globalVideo.error) {
+          globalVideo.play().catch((error) => {
+            console.warn('Background video playback:', error.name, error.message);
+            hideLoader();
           });
-        }, { threshold: 0.15 });
-        contactObs.observe(contactSection);
+        }
       }
+
+      document.addEventListener('visibilitychange', playVideo);
+      window.addEventListener('pageshow', playVideo);
+      document.addEventListener('click', playVideo);
+      document.addEventListener('keydown', playVideo);
+      loader.addEventListener('transitionend', playVideo, { once: true });
 
       globalVideo.addEventListener('progress', () => {
         if (globalVideo.buffered.length && globalVideo.duration) {
@@ -601,7 +529,6 @@
 
       setTimeout(hideLoader, 2500);
 
-      globalVideo.load();
       playVideo();
     }
 
