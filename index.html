@@ -89,6 +89,7 @@
       letter-spacing: -0.02em; color: #F0EDE6;
     }
     .hero-copy-left p { margin-bottom: 0.15rem; }
+    .hero-copy-left .hero-copy-closer { white-space: nowrap; font-size: min(1em, 3.25vw, 2.55rem); }
     .hero-tagline-right {
       position: absolute; right: 5%; top: 36%;
       transform: translateY(-50%);
@@ -221,6 +222,7 @@
       .nav-links { gap: 1rem; }
       .nav-links a { font-size: 11px; }
       .hero-copy-left { left: 1.25rem; bottom: 8%; max-width: 92%; font-size: clamp(1.35rem, 6vw, 1.75rem); }
+      .hero-copy-left .hero-copy-closer { font-size: min(1em, 5vw); }
       .hero-tagline-right { right: 1.25rem; top: 28%; max-width: 48%; font-size: 12px; }
       .proj-card h3 { font-size: 28px; }
       .section-title { font-size: 28px; }
@@ -271,7 +273,7 @@
       <div class="hero-copy-left reveal visible">
         <p>By day, I build relationships across borders.</p>
         <p>By night, I build ideas with AI.</p>
-        <p>Same curiosity. Different outcomes.</p>
+        <p class="hero-copy-closer">Same curiosity. Different outcomes.</p>
       </div>
       <p class="hero-tagline-right reveal visible" style="transition-delay:0.12s">Bridging markets across Europe, the Middle East and Asia</p>
       <div id="scrollHint">
@@ -366,13 +368,13 @@
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
       <div class="proj-card reveal" style="transition-delay:0.1s">
-        <div class="section-label">AI-Powered Luxury Travel Platform</div>
+        <div class="section-label">AI-Assisted Travel Platform</div>
         <h3>Eastern Wander</h3>
-        <p>Built and launched a 30+ page AI-assisted travel platform from scratch, designing website architecture, customer journeys, CRM workflows, database integration, inquiry systems, and deployment.</p>
-        <p style="font-size:0.82rem;line-height:1.7;color:rgba(240,237,230,0.55);margin-bottom:1rem;font-weight:300;">Built scalable service delivery and customer acquisition systems through partnerships, CRM workflows, and multi-channel growth strategies.</p>
+        <p>I designed and built a 30+ page travel platform using AI-assisted development, mapping the customer journey from exploring trips to submitting an inquiry and the operator workflow for follow-up.</p>
+        <p style="font-size:0.82rem;line-height:1.7;color:rgba(240,237,230,0.55);margin-bottom:1rem;font-weight:300;">I connected the inquiry form to Supabase and an admin view. I verified that inquiries were saved and visible in the admin dashboard; automated confirmation email delivery remained unverified.</p>
         <div class="proj-tags">
-          <span class="skill-pill">Platform Architecture</span><span class="skill-pill">CRM Workflows</span>
-          <span class="skill-pill">Customer Journeys</span><span class="skill-pill">Growth Strategy</span>
+          <span class="skill-pill">AI-Assisted Development</span><span class="skill-pill">Customer Journeys</span>
+          <span class="skill-pill">Supabase</span><span class="skill-pill">Workflow Testing</span>
         </div>
         <a class="proj-btn" href="/case-studies/eastern-wander.html">View Case Study <span aria-hidden="true">→</span></a>
         <a href="https://www.easternwander.com" target="_blank" rel="noopener" class="proj-btn" style="margin-top:0.5rem">
@@ -382,10 +384,10 @@
       <div class="proj-card reveal" style="transition-delay:0.15s">
         <div class="section-label">AI-Assisted Workflow · In Development</div>
         <h3>Job Tracker</h3>
-        <p>A configurable job-search workbench that separates discovery, résumé fit, eligibility and application status. I designed the workflow and built it with Codex, keeping final submissions manual.</p>
+        <p>I built a Python job-search workbench with Codex. It deduplicates listings and separates résumé fit, eligibility and application status. I tested a single cloud discovery run and verified that re-importing it created no duplicates in a test database. Final submissions stay manual.</p>
         <div class="proj-tags">
-          <span class="skill-pill">Workflow Design</span><span class="skill-pill">Rules-Based Scoring</span>
-          <span class="skill-pill">Human Review</span>
+          <span class="skill-pill">Python &amp; Codex</span><span class="skill-pill">Rules-Based Scoring</span>
+          <span class="skill-pill">Human-in-the-Loop Automation</span>
         </div>
         <a class="proj-btn" href="/case-studies/job-tracker.html">View Case Study <span aria-hidden="true">→</span></a>
         <a href="https://github.com/eastern-wander/job-tracker-board" target="_blank" rel="noopener" class="proj-btn" style="margin-top:0.5rem">
@@ -395,8 +397,8 @@
       <div class="proj-card reveal" style="transition-delay:0.2s">
         <div class="section-label">Data-Driven Growth Analytics</div>
         <h3>Tableau Analyst</h3>
-        <p>Used SQL, Tableau, and customer segmentation models to analyse large-scale user data, transforming customer behaviour into business insights that supported growth and commercial decision-making.</p>
-        <p style="font-size:0.82rem;line-height:1.7;color:rgba(240,237,230,0.55);margin-bottom:1rem;font-weight:300;">Designed interactive dashboards and data visualisations to improve decision-making through clear, actionable business insights.</p>
+        <p>I used SQL to analyse user behaviour and group customers into segments, then built Tableau dashboards to make the differences between those segments visible.</p>
+        <p style="font-size:0.82rem;line-height:1.7;color:rgba(240,237,230,0.55);margin-bottom:1rem;font-weight:300;">The dashboards turned raw behavioural data into a clearer view of which customer groups to prioritise for growth decisions.</p>
         <div class="proj-tags">
           <span class="skill-pill">SQL & Tableau</span><span class="skill-pill">Customer Segmentation</span>
           <span class="skill-pill">Growth Analytics</span><span class="skill-pill">Business Intelligence</span>
@@ -404,6 +406,16 @@
         <a href="https://bit.ly/49KpKIh" target="_blank" rel="noopener" class="proj-btn">
           Open Case Study <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
         </a>
+      </div>
+      <div class="proj-card reveal" style="transition-delay:0.25s">
+        <div class="section-label">Bilingual AI Assistant · Private Preview</div>
+        <h3>Ask Spencer</h3>
+        <p>I connected my portfolio to DeepSeek through a server-side API. A curated story library gives answers a factual basis, and controlled tests checked English and Chinese follow-ups. Private notes and raw chat history stay outside the model requests.</p>
+        <div class="proj-tags">
+          <span class="skill-pill">LLM &amp; API Integration</span><span class="skill-pill">Grounded Retrieval</span>
+          <span class="skill-pill">Bilingual Testing</span><span class="skill-pill">Data Privacy</span>
+        </div>
+        <p style="font-size:0.82rem;line-height:1.7;color:rgba(240,237,230,0.55);margin-bottom:0;font-weight:300;">Tested in a sign-in-protected preview; the chatbot is not publicly available.</p>
       </div>
     </div>
   </section>
